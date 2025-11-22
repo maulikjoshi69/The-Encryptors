@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medic - Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1>🏥 Medic Admin</h1>
+            </div>
+            <div class="nav-links">
+                <a href="#" onclick="showAdminSection('dashboard')">Dashboard</a>
+                <a href="#" onclick="showAdminSection('appointments')">Appointments</a>
+                <a href="#" onclick="showAdminSection('orders')">Orders</a>
+                <a href="#" onclick="showAdminSection('reports')">Reports</a>
+                <a href="#" onclick="showAdminSection('emergencies')">Emergencies</a>
+                <a href="index.html">User View</a>
+                <button class="btn-logout" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAuthModal()">&times;</span>
+            <h2>Admin Login</h2>
+            <form id="authForm" onsubmit="handleAuth(event)">
+                <div>
+                    <label>Email</label>
+                    <input type="email" id="authEmail" required>
+                </div>
+                <div>
+                    <label>Password</label>
+                    <input type="password" id="authPassword" required>
+                </div>
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+            <p>Need an admin account? Register with role 'admin'</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+            <h2>Admin Dashboard</h2>
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>Pending Appointments</h3>
+                    <p id="pendingAppointments">0</p>
+                </div>
+                <div class="card">
+                    <h3>Total Orders</h3>
+                    <p id="totalOrders">0</p>
+                </div>
+                <div class="card">
+                    <h3>Active Emergencies</h3>
+                    <p id="activeEmergencies">0</p>
+                </div>
+                <div class="card">
+                    <h3>Reports</h3>
+                    <p id="totalReports">0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Appointments Management -->
+        <section id="appointments" class="section">
+            <h2>Manage Appointments</h2>
+            <div id="adminAppointmentsList" class="admin-list"></div>
+        </section>
+
+        <!-- Orders Management -->
+        <section id="orders" class="section">
+            <h2>Manage Orders</h2>
+            <div id="adminOrdersList" class="admin-list"></div>
+        </section>
+
+        <!-- Reports Management -->
+        <section id="reports" class="section">
+            <h2>Manage Reports</h2>
+            <div id="adminReportsList" class="admin-list"></div>
+        </section>
+
+        <!-- Emergencies Management -->
+        <section id="emergencies" class="section">
+            <h2>Emergency Requests</h2>
+            <div id="adminEmergenciesList" class="admin-list"></div>
+        </section>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
+

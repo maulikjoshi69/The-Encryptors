@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medic - Unified Healthcare Platform</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1>🏥 Medic</h1>
+            </div>
+            <div class="nav-links">
+                <a href="#" onclick="showSection('dashboard')">📊 Dashboard</a>
+                <a href="#" onclick="showSection('records')">📋 Health Records</a>
+                <a href="#" onclick="showSection('appointments')">📅 Appointments</a>
+                <a href="#" onclick="showSection('medicines')">💊 Medicines</a>
+                <a href="#" onclick="showSection('reports')">📄 Reports</a>
+                <a href="#" onclick="showSection('emergency')">🚨 Emergency</a>
+                <a href="#" onclick="showSection('ai-assistant')">🤖 AI Assistant</a>
+                <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login/Register Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAuthModal()">&times;</span>
+            <h2 id="authTitle">Login to Medic</h2>
+            <form id="authForm" onsubmit="handleAuth(event)">
+                <div id="nameField" style="display: none;">
+                    <label>Full Name</label>
+                    <input type="text" id="authName" required>
+                </div>
+                <div>
+                    <label>Email</label>
+                    <input type="email" id="authEmail" required>
+                </div>
+                <div>
+                    <label>Password</label>
+                    <input type="password" id="authPassword" required>
+                </div>
+                <button type="submit" class="btn-primary">Submit</button>
+            </form>
+            <p id="authToggle">Don't have an account? <a href="#" onclick="toggleAuthMode()">Register</a></p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+            <h2>Welcome to Medic</h2>
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>📋 Health Records</h3>
+                    <p id="recordsCount">0 records</p>
+                    <button class="btn-primary" onclick="showSection('records')">View Records</button>
+                </div>
+                <div class="card">
+                    <h3>📅 Appointments</h3>
+                    <p id="appointmentsCount">0 appointments</p>
+                    <button class="btn-primary" onclick="showSection('appointments')">View Appointments</button>
+                </div>
+                <div class="card">
+                    <h3>💊 Medicine Orders</h3>
+                    <p id="ordersCount">0 orders</p>
+                    <button class="btn-primary" onclick="showSection('medicines')">Order Medicines</button>
+                </div>
+                <div class="card">
+                    <h3>📄 Lab Reports</h3>
+                    <p id="reportsCount">0 reports</p>
+                    <button class="btn-primary" onclick="showSection('reports')">View Reports</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Health Records Section -->
+        <section id="records" class="section">
+            <div class="section-header">
+                <h2>📋 Health Records</h2>
+                <button class="btn-primary" onclick="showAddRecordModal()">➕ Add Record</button>
+            </div>
+            <div id="recordsList" class="records-list"></div>
+        </section>
+
+        <!-- Appointments Section -->
+        <section id="appointments" class="section">
+            <div class="section-header">
+                <h2>📅 Appointments</h2>
+                <button class="btn-primary" onclick="showAddAppointmentModal()">➕ Book Appointment</button>
+            </div>
+            <div id="appointmentsList" class="appointments-list"></div>
+        </section>
+
+        <!-- Medicines Section -->
+        <section id="medicines" class="section">
+            <h2>💊 Order Medicines</h2>
+            <div id="medicinesList" class="medicines-grid"></div>
+            <div id="cartSection" style="display: none;">
+                <h3>Shopping Cart</h3>
+                <div id="cartItems"></div>
+                <div class="cart-total">
+                    <strong>Total: ₹<span id="cartTotal">0</span></strong>
+                    <button class="btn-primary" onclick="checkout()">Checkout</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports" class="section">
+            <div class="section-header">
+                <h2>📄 Lab Reports</h2>
+                <button class="btn-primary" onclick="showAddReportModal()">➕ Upload Report</button>
+            </div>
+            <div id="reportsList" class="reports-list"></div>
+        </section>
+
+        <!-- Emergency Section -->
+        <section id="emergency" class="section">
+            <h2>🚨 Emergency Services</h2>
+            <div class="emergency-card">
+                <h3>🚨 Need Immediate Help?</h3>
+                <p>Use this service to request ambulance or emergency medical assistance</p>
+                <form id="emergencyForm" onsubmit="handleEmergency(event)">
+                    <div>
+                        <label>Emergency Type</label>
+                        <select id="emergencyType" required>
+                            <option value="ambulance">Ambulance</option>
+                            <option value="medical_emergency">Medical Emergency</option>
+                            <option value="accident">Accident</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Location</label>
+                        <input type="text" id="emergencyLocation" placeholder="Enter your location" required>
+                    </div>
+                    <div>
+                        <label>Phone Number</label>
+                        <input type="tel" id="emergencyPhone" placeholder="Your contact number" required>
+                    </div>
+                    <div>
+                        <label>Description</label>
+                        <textarea id="emergencyDescription" rows="4" placeholder="Describe the emergency situation"></textarea>
+                    </div>
+                    <button type="submit" class="btn-emergency">🚨 Request Emergency Help</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- AI Assistant Section -->
+        <section id="ai-assistant" class="section">
+            <h2>🤖 AI Health Assistant</h2>
+            <div class="ai-card">
+                <p>Describe your symptoms and get AI-powered health insights</p>
+                <form id="aiForm" onsubmit="handleAICheck(event)">
+                    <div>
+                        <label>Age</label>
+                        <input type="number" id="aiAge" min="1" max="120" required>
+                    </div>
+                    <div>
+                        <label>Gender</label>
+                        <select id="aiGender" required>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Symptoms (comma-separated)</label>
+                        <textarea id="aiSymptoms" rows="4" placeholder="e.g., fever, headache, cough" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">Analyze Symptoms</button>
+                </form>
+                <div id="aiResults" class="ai-results" style="display: none;"></div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Add Record Modal -->
+    <div id="recordModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeRecordModal()">&times;</span>
+            <h2>Add Health Record</h2>
+            <form onsubmit="addRecord(event)">
+                <div>
+                    <label>Title</label>
+                    <input type="text" id="recordTitle" required>
+                </div>
+                <div>
+                    <label>Type</label>
+                    <select id="recordType" required>
+                        <option value="general">General</option>
+                        <option value="prescription">Prescription</option>
+                        <option value="diagnosis">Diagnosis</option>
+                        <option value="vaccination">Vaccination</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Date</label>
+                    <input type="date" id="recordDate" required>
+                </div>
+                <div>
+                    <label>Doctor Name</label>
+                    <input type="text" id="recordDoctor">
+                </div>
+                <div>
+                    <label>Description</label>
+                    <textarea id="recordDescription" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Save Record</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Appointment Modal -->
+    <div id="appointmentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAppointmentModal()">&times;</span>
+            <h2>Book Appointment</h2>
+            <form onsubmit="addAppointment(event)">
+                <div>
+                    <label>Doctor Name</label>
+                    <input type="text" id="appointmentDoctor" required>
+                </div>
+                <div>
+                    <label>Type</label>
+                    <select id="appointmentType" required>
+                        <option value="consultation">Consultation</option>
+                        <option value="lab_test">Lab Test</option>
+                        <option value="follow_up">Follow-up</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Date</label>
+                    <input type="date" id="appointmentDate" required>
+                </div>
+                <div>
+                    <label>Time</label>
+                    <input type="time" id="appointmentTime" required>
+                </div>
+                <div>
+                    <label>Notes</label>
+                    <textarea id="appointmentNotes" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Book Appointment</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Report Modal -->
+    <div id="reportModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeReportModal()">&times;</span>
+            <h2>Upload Lab Report</h2>
+            <form onsubmit="addReport(event)">
+                <div>
+                    <label>Report Title</label>
+                    <input type="text" id="reportTitle" required>
+                </div>
+                <div>
+                    <label>Type</label>
+                    <select id="reportType" required>
+                        <option value="lab_test">Lab Test</option>
+                        <option value="blood_test">Blood Test</option>
+                        <option value="xray">X-Ray</option>
+                        <option value="scan">Scan</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Lab Name</label>
+                    <input type="text" id="reportLab" required>
+                </div>
+                <div>
+                    <label>Date</label>
+                    <input type="date" id="reportDate" required>
+                </div>
+                <div>
+                    <label>Results/Notes</label>
+                    <textarea id="reportResults" rows="4" placeholder="Enter test results or notes"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Save Report</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
